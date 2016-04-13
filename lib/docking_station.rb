@@ -9,7 +9,7 @@ class DockingStation
    end
 
   def release_bike
-    fail 'No bikes available' if @bike_array.empty?
+    fail 'No bikes available' if self.empty?
     @bike_array.pop
   end
 
@@ -23,9 +23,27 @@ class DockingStation
   # end
 
   def dock(bike)
-    fail 'Docking station full' if @bike_array.count >= 20
+    fail 'Docking station full' if self.full? 
      @bike_array <<  bike
   end
+
+private
+
+  def empty?
+    if @bike_array.empty?
+      true
+     else
+      false
+     end  
+  end 
+
+  def full? 
+    if @bike_array.count >= 20 
+      true
+    else
+      false
+    end   
+  end  
 
   #Our code which passed
   # def dock(docked_bike)
