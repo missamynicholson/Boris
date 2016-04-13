@@ -1,45 +1,74 @@
-require 'docking_station'
+require 'DockingStation'
+
+require 'bike'
+
 describe DockingStation do
-
   it 'responds to release_bike' do
-    expect(subject).to respond_to :release_bike
+    expect(DockingStation.new).to respond_to 'release_bike'
   end
 
-  #it 'releases bike' do
-    #bike = Bike.new
-    #expect(bike).to be_working
-  #end
+  # Removing the respond_to rspec tests to clean-up (syntactic sugar)
+  # it 'expects a bike to be working' do
+  #   expect(DockingStation.new.release_bike).to respond_to :working?
+  # end
 
-  #it 'dock something' do
-    #bike = Bike.new
-    #expect(subject).to respond_to(:dock_bike).with(1).argument
-  #end
+  it 'expects working to return true' do
+    expect(DockingStation.new.release_bike).to be_working
+  end
 
-it 'dock something' do
+  # Removing the respond_to rspec tests to clean-up (syntactic sugar)
+  # it 'responds to docking' do
+  #   expect(DockingStation.new).to respond_to 'dock'
+  # end
+
+  it 'expects a bike to be docked' do
     bike = Bike.new
-    expect(subject.dock_bike(bike)).to eq bike
+    expect(DockingStation.new.dock(bike)).to eq bike
   end
 
-  it 'responds to a bike' do
+  # it 'respond to bike' do
+  #  expect(DockingStation.new).to respond_to :bike
+  # end
+
+  it 'contains bike' do
     bike = Bike.new
-    subject.dock_bike(bike)
-    expect(subject.bike).to eq bike
+    station = DockingStation.new
+    station.dock(bike)
+    expect(station.bike).to eq bike
   end
 
-describe '#release_bike' do
-
-  it 'raises an error when there are no bikes available' do
+  describe '#release_bike' do
+    it 'raises an error when there are no bikes available' do
       # Let's not dock a bike first:
-      # remember subject == DockingStation.new
+      #remember subject == DockingStation.new
       expect { subject.release_bike }.to raise_error 'No bikes available'
     end
-end
+  end
 
-describe '#dock_bike' do
-  it 'raises an error when there is already a docked bike' do
-      expect { subject.dock_bike(Bike.new)}.to raise_error(RuntimeError, 'Dock full')
+  describe '#dock' do
+    it 'raises an error when full' do
+      subject.dock(Bike.new)
+      expect { subject.dock Bike.new }.to raise_error 'Docking station full'
     end
-end
+  end
+
+  # Our original test which passed
+  # it 'returns error if dockingstation has already given out the bike' do
+  #   station = DockingStation.new
+  #   station.release_bike
+  #   expect{station.release_bike}.to raise_error 'Bike already exists'
+  #end
+    
+
+  #Our original test passed - not as legible as Makers'
+  #it 'returns error if docking station already has a bike' do
+  #  station = DockingStation.new
+  #  bike = Bike.new
+  #  bike2 = Bike.new
+  #  station.dock(bike)
+  #  expect{station.dock(bike2)}.to raise_error 'Dock already full'
+  #end
 
 end
+
 
