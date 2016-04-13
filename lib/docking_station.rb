@@ -1,11 +1,16 @@
 require_relative 'bike'
 
 class DockingStation
-  attr_reader :bike
+  attr_reader :bike_array
+
+
+   def initialize
+   	@bike_array = []
+   end
 
   def release_bike
-    fail 'No bikes available' unless @bike
-    @bike
+    fail 'No bikes available' if @bike_array.empty?
+    @bike_array.pop
   end
 
   # Original code which passed original test
@@ -18,8 +23,8 @@ class DockingStation
   # end
 
   def dock(bike)
-    fail 'Docking station full' if @bike
-     @bike = bike
+    fail 'Docking station full' if @bike_array.count >= 20
+     @bike_array <<  bike
   end
 
   #Our code which passed

@@ -20,35 +20,44 @@ describe DockingStation do
 
   it 'expects a bike to be docked' do
     bike = Bike.new
-    expect(DockingStation.new.dock(bike)).to eq bike
+    bike_array = subject.bike_array 	
+    expect(DockingStation.new.dock(bike)).to eq (bike_array << bike)
   end
 
   # it 'respond to bike' do
   #  expect(DockingStation.new).to respond_to :bike
   # end
 
-  it 'contains bike' do
-    bike = Bike.new
-    station = DockingStation.new
-    station.dock(bike)
-    expect(station.bike).to eq bike
-  end
+ # it 'contains bike' do
+  #  bike = Bike.new
+  #  station = DockingStation.new
+  #  station.dock(bike)
+  #  expect(station.bike).to eq bike
+ # end
 
   describe '#release_bike' do
     it 'responds to release_bike' do
       expect(DockingStation.new).to respond_to :release_bike
     end
 
+     it 'releases a bike' do
+	bike = Bike.new
+	subject.dock(bike)
+	expect(subject.release_bike).to eq bike
+     end
+
     it 'raises an error when there are no bikes available' do
       # Let's not dock a bike first:
       #remember subject == DockingStation.new
+	bike_array = subject.bike_array
+	
       expect { subject.release_bike }.to raise_error 'No bikes available'
     end
   end
 
   describe '#dock' do
     it 'raises an error when full' do
-      subject.dock(Bike.new)
+      20.times {subject.dock(Bike.new)}
       expect { subject.dock Bike.new }.to raise_error 'Docking station full'
     end
   end
