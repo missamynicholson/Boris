@@ -1,11 +1,8 @@
-require 'DockingStation'
+require 'docking_station'
 
 require 'bike'
 
 describe DockingStation do
-  it 'responds to release_bike' do
-    expect(DockingStation.new).to respond_to 'release_bike'
-  end
 
   # Removing the respond_to rspec tests to clean-up (syntactic sugar)
   # it 'expects a bike to be working' do
@@ -13,7 +10,7 @@ describe DockingStation do
   # end
 
   it 'expects working to return true' do
-    expect(DockingStation.new.release_bike).to be_working
+    expect(Bike.new).to be_working
   end
 
   # Removing the respond_to rspec tests to clean-up (syntactic sugar)
@@ -38,6 +35,10 @@ describe DockingStation do
   end
 
   describe '#release_bike' do
+    it 'responds to release_bike' do
+      expect(DockingStation.new).to respond_to :release_bike
+    end
+
     it 'raises an error when there are no bikes available' do
       # Let's not dock a bike first:
       #remember subject == DockingStation.new
@@ -58,7 +59,7 @@ describe DockingStation do
   #   station.release_bike
   #   expect{station.release_bike}.to raise_error 'Bike already exists'
   #end
-    
+
 
   #Our original test passed - not as legible as Makers'
   #it 'returns error if docking station already has a bike' do
