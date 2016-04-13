@@ -4,18 +4,24 @@ class DockingStation
 DEFAULT_CAPACITY = 20 
 
   attr_reader :bike_array
+  attr_reader :broken_bike_array
   attr_reader :capacity
 
 
    def initialize(capacity = DEFAULT_CAPACITY)
     @capacity = capacity
    	@bike_array = []
+        @broken_bike_array = []
    end
 
   def release_bike
     fail 'No bikes available' if self.empty?
     @bike_array.pop
   end
+
+   def report(bike)
+     @broken_bike_array << bike
+   end
 
   # Original code which passed original test
   # def release_bike

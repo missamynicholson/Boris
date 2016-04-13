@@ -4,14 +4,30 @@ require 'bike'
 
 describe DockingStation do
 
-  # Removing the respond_to rspec tests to clean-up (syntactic sugar)
-  # it 'expects a bike to be working' do
-  #   expect(DockingStation.new.release_bike).to respond_to :working?
-  # end
 
-  it 'expects working to return true' do
-    expect(Bike.new).to be_working
+  # Removing the respond_to rspec tests 
+   #it 'expects a bike to be working' do
+    # expect(DockingStation.new.release_bike.working?).to eq true
+   #end
+
+  #it 'expects bike to be reported as broken' do
+   # DockingStation.report
+#DockingStation.dock(bike)
+   # expect(Bike.new).not_to be_working
+ # end
+
+   it 'responds to the method report' do
+      expect(DockingStation.new).to respond_to :report
+   end
+
+  describe '#report' do
+    it 'report bike and add to broken bike array' do
+      bike = Bike.new
+      broken_bike_array = subject.broken_bike_array
+       expect(DockingStation.new.report(bike)).to eq (broken_bike_array << bike)
+    end
   end
+     
 
   # Removing the respond_to rspec tests to clean-up (syntactic sugar)
   # it 'responds to docking' do
