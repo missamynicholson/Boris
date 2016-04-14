@@ -4,18 +4,6 @@ require 'bike'
 
 describe DockingStation do
 
-  it 'responds to the method report' do
-    expect(DockingStation.new).to respond_to :report
-  end
-
-  describe '#report' do
-    it 'report bike and add to broken bike array' do
-      bike = Bike.new
-      subject.report(bike)
-      expect(bike.working?).to eq false
-    end
-  end
-
   it 'expects a bike to be docked' do
     bike = Bike.new
     bike_array = subject.bike_array
@@ -50,7 +38,7 @@ describe DockingStation do
     it 'releases a working bike' do
        bike = Bike.new
        subject.dock(bike)
-       expect(subject.release_bike).to be_working
+       expect(subject.release_bike).not_to be_broken
     end
 
     it 'raises an error when there are no bikes available' do
@@ -62,10 +50,9 @@ describe DockingStation do
     it 'raises an error when bike is broken' do
        bike = Bike.new
        subject.dock(bike)
-       subject.report(bike)
+       bike.report_broken
        expect {subject.release_bike }.to raise_error 'This bike is broken, please try again'
     end
-
   end
 
   describe '#dock' do
@@ -74,6 +61,29 @@ describe DockingStation do
       expect { subject.dock Bike.new }.to raise_error 'Docking station full'
     end
   end
+
+end
+
+=begin
+
+
+it 'responds to the method report' do
+     expect(DockingStation.new).to respond_to :report
+end
+
+describe '#report' do
+  it 'report bike and add to broken bike array' do
+    bike = Bike.new
+    subject.report(bike)
+    expect(bike.working?).to eq false
+  end
+end
+
+it 'releases a working bike' do
+  bike = Bike.new
+  subject.dock(bike)
+  expect(subject.release_bike).to be_working
+ end
 
   # it 'respond to bike' do
 #  expect(DockingStation.new).to respond_to :bike
@@ -120,6 +130,9 @@ describe DockingStation do
   #   expect{station.dock(bike2)}.to raise_error 'Dock already full'
   # end
 
-end
+
+=end
+
+
 
 

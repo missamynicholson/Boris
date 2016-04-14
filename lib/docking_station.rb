@@ -15,16 +15,12 @@ class DockingStation
   def release_bike
     fail 'No bikes available' if self.empty?
     bike_to_release = @bike_array.pop
-    if bike_to_release.working? == false
+    if bike_to_release.broken? == true
       fail 'This bike is broken, please try again'
     else
       return bike_to_release
     end
   end
-
-   def report(bike)
-     bike.broken = true
-   end
 
   def dock(bike)
     fail 'Docking station full' if self.full?
@@ -48,6 +44,24 @@ class DockingStation
       false
     end
   end
+end
+
+=begin
+
+def release_bike
+  fail 'No bikes available' if self.empty?
+  bike_to_release = @bike_array.pop
+    if bike_to_release.working? == false
+      fail 'This bike is broken, please try again'
+    else
+      return bike_to_release
+    end
+end
+
+def report(bike)
+  bike.broken = true
+end
+
 
   # Original code which passed original test
   # def release_bike
@@ -68,3 +82,4 @@ class DockingStation
   # end
 
 end
+=end
