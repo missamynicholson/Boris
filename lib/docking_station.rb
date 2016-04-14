@@ -1,39 +1,33 @@
 require_relative 'bike'
 
 class DockingStation
-DEFAULT_CAPACITY = 20 
+  DEFAULT_CAPACITY = 20
 
   attr_reader :bike_array
-  attr_reader :broken_bike_array
   attr_reader :capacity
 
 
    def initialize(capacity = DEFAULT_CAPACITY)
     @capacity = capacity
-   	@bike_array = []
-        @broken_bike_array = []
+    @bike_array = []
    end
 
   def release_bike
     fail 'No bikes available' if self.empty?
-    @bike_array.pop
+    bike_to_release = @bike_array.pop
+    if bike_to_release.working? == false
+      fail 'This bike is broken, please try again'
+    else
+      return bike_to_release
+    end
   end
 
    def report(bike)
-     @broken_bike_array << bike
+     bike.broken = true
    end
 
-  # Original code which passed original test
-  # def release_bike
-  #   if @bike
-  #      fail "Bike already exists"
-  #    else
-  #      @bike = Bike.new
-  #  end
-  # end
-
   def dock(bike)
-    fail 'Docking station full' if self.full? 
+    fail 'Docking station full' if self.full?
      @bike_array <<  bike
   end
 
@@ -44,16 +38,25 @@ DEFAULT_CAPACITY = 20
       true
      else
       false
-     end  
-  end 
+     end
+  end
 
-  def full? 
-    if @bike_array.count >= @capacity  
+  def full?
+    if @bike_array.count >= @capacity
       true
     else
       false
-    end   
-  end  
+    end
+  end
+
+  # Original code which passed original test
+  # def release_bike
+  #   if @bike
+  #      fail "Bike already exists"
+  #    else
+  #      @bike = Bike.new
+  #  end
+  # end
 
   #Our code which passed
   # def dock(docked_bike)
