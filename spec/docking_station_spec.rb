@@ -4,7 +4,8 @@ require 'bike'
 
 describe DockingStation do
 
- let(:bike){ double :bike }
+ let(:bike){ double :bike, broken?: false }
+ let(:broken_bike){ double :bike, broken?: true}
 
   it 'expects a bike to be docked' do
     bike_array = subject.bike_array
@@ -30,13 +31,11 @@ describe DockingStation do
     end
 
     it 'releases a bike' do
-      allow(bike).to receive(:broken?).and_return(false)
       subject.dock(bike)
       expect(subject.release_bike).to eq bike
     end
 
     it 'releases a working bike' do
-       allow(bike).to receive(:broken?).and_return(false)
        subject.dock(bike)
        expect(subject.release_bike).not_to be_broken
     end
@@ -48,8 +47,7 @@ describe DockingStation do
     end
 
     it 'raises an error when bike is broken' do
-       allow(bike).to receive(:broken?).and_return(true)
-       subject.dock(bike)
+       subject.dock(broken_bike)
        expect {subject.release_bike }.to raise_error 'This bike is broken, please try again'
     end
   end
