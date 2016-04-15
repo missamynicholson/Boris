@@ -7,6 +7,11 @@ describe Bike do
       subject.report_broken
       expect(subject.broken?).to eq true
     end
+
+    it 'can be fixed' do
+      subject.fix
+      expect(subject.broken?).to eq false
+    end
 end
 
 =begin
