@@ -3,7 +3,7 @@ require 'bike'
 
 describe Garage do
 
- let(:bike){ double :bike, broken?: false }
+ let(:bike){ double :bike, broken?: false, fix: true }
  let(:broken_bike){ double :bike, broken?: true}
 
   it 'expects a bike to be docked' do
@@ -61,5 +61,11 @@ describe Garage do
        expect {subject.dock(bike)}.to raise_error 'This bike is working, it should not be docked in the garage'
     end
   end
+
+  #describe '#fix' do
+    #it 'fixes a bike' do
+       #expect (subject.fix_bike(broken_bike)).to be_working
+    #end
+  #end
 
 end

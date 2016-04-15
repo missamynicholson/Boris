@@ -3,7 +3,7 @@ require_relative 'bike'
 class DockingStation
   DEFAULT_CAPACITY = 20
 
-  attr_reader :bike_array
+
   attr_reader :capacity
 
 
@@ -28,6 +28,8 @@ class DockingStation
   end
 
 #private
+
+  attr_reader :bike_array
 
   def empty?
     if @bike_array.empty?

@@ -31,6 +31,11 @@ class Garage
     end
   end
 
+  #def fix_bike(bike)
+    #bike.fix
+    #return bike
+  #end
+
 #private
 
   def empty?
