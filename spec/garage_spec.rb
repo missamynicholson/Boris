@@ -5,56 +5,67 @@ require 'bike'
 describe Garage do
     let(:bike) { double(:bike, report_broken: false, broken?: false, fix: true) }
     let(:broken_bike) { double(:broken_bike, report_broken: true, broken?: true, fix: false) }
+
+  it 'fixes bikes' do
+    bike = Bike.new
+    bike.report_broken
+    subject.dock(bike)
+    subject.fix_bike(bike)
+    expect(subject.release_bike).not_to be_broken
+  end
+
+  describe 'initialization' do
+    it 'sets capacity of dock of 20 when no argument is passed' do
+      expect(subject.capacity).to eq 20
+    end
+
+    it 'sets capacity to argument passed' do
+      garage = Garage.new(40)
+      expect(garage.capacity).to eq 40
+    end
+  end
+
+  describe '#release_bike' do
     it 'responds to release_bike' do
-        expect(Garage.new).to respond_to 'release_bike_to_van'
+      expect(subject).to respond_to :release_bike
     end
 
+    it 'releases a bike' do
+      subject.dock(bike)
+      expect(subject.release_bike).to eq bike
+    end
+
+    it 'releases a working bike' do
+       subject.dock(bike)
+       expect(subject.release_bike).not_to be_broken
+    end
+
+    it 'raises an error when there are no bikes available' do
+      # Let's not dock a bike first:
+      bikes = subject.bikes
+      expect { subject.release_bike }.to raise_error 'No bikes available'
+    end
+
+    it 'raises an error when bike is broken' do
+       subject.dock(broken_bike)
+       expect {subject.release_bike }.to raise_error 'No working bikes available'
+    end
+  end
+
+  describe '#dock' do
+    it 'contains bike' do
+       subject.dock(broken_bike)
+       expect(subject.bikes).to include broken_bike
+   end
     it 'expects a bike to be docked' do
-	     expect(Garage.new.dock_to_garage(bike)).to include bike
+      bikes = subject.bikes
+      expect(subject.dock(bike)).to eq (bikes << bike)
     end
 
-
-   it 'contains bike' do
-	     subject.dock_to_garage(broken_bike)
-	     expect(subject.broken_bikes).to include broken_bike
-   end
-
-
-   it 'returns error if dockingstation has already given out the bike' do
-        station = Garage.new
-        expect{station.release_bike_to_van}.to raise_error 'No bikes available'
-   end
-
-
-    describe '#dock' do
-        it 'raises an error when exceding DEFAULT_CAPACITY' do
-          subject.capacity.times { subject.dock_to_garage broken_bike }
-          expect { subject.dock_to_garage broken_bike }.to raise_error 'Dock already full'
-        end
-
-        it 'test docks a broken_bike' do
-          subject.dock_to_garage(broken_bike)
-          expect(subject.dock_to_garage(broken_bike)).to include broken_bike
-        end
-
+    it 'raises an error when full' do
+      subject.capacity.times {subject.dock(bike)}
+      expect { subject.dock bike }.to raise_error 'Dock already full'
     end
-
-    it 'Set new Docking station with DEFAULT_CAPACITY' do
-      expect(subject.capacity).to eq Garage::DEFAULT_CAPACITY
-
-    end
-
-    it 'Set new DockingStation with user input' do
-      ds = Garage.new(8)
-      expect(ds.capacity).to eq 8
-    end
-
-    it 'Does not releases broken bikes' do
-      subject.dock_to_garage(broken_bike)
-      array = [broken_bike]
-      subject.fix_bike(array)
-      expect{subject.release_bike_to_van}.to raise_error 'no working bikes available'
-    end
-
+  end
 
 end

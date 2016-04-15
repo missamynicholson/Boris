@@ -3,7 +3,8 @@ require 'van'
 
 describe Van do
 
-  let(:bike) {double(:broken_bike, report_broken: true, broken?: true)}
+  let(:bike) {double(:bike, report_broken: false, broken?: false)}
+  let(:broken_bike) { double(:broken_bike, report_broken: true, broken?: true, fix: false) }
   let(:station) {double(:DockingStation, bike_broken: [bike], sort_broken_bikes: [bike])}
 
   it 'returns broken bikes' do
@@ -12,20 +13,59 @@ describe Van do
     expect(subject.collect_broken_bikes).to eq [bike]
   end
 
-  describe '#van_dock' do
-    it 'it raises an error if van if full' do
-      subject.capacity.times { subject.van_dock bike }
-      expect { subject.van_dock bike }.to raise_error 'Dock already full'
+  describe 'initialization' do
+    it 'sets capacity of dock of 20 when no argument is passed' do
+      expect(subject.capacity).to eq 20
+    end
+
+    it 'sets capacity to argument passed' do
+      van = Van.new(40)
+      expect(van.capacity).to eq 40
     end
   end
 
-  it 'set van DEFAULT_CAPACITY' do
-    expect(subject.capacity).to eq Van::DEFAULT_CAPACITY
+  describe '#release_bike' do
+    it 'responds to release_bike' do
+      expect(subject).to respond_to :release_bike
+    end
+
+    it 'releases a bike' do
+      subject.dock(bike)
+      expect(subject.release_bike).to eq bike
+    end
+
+    it 'releases a working bike' do
+       subject.dock(bike)
+       expect(subject.release_bike).not_to be_broken
+    end
+
+    it 'raises an error when there are no bikes available' do
+      # Let's not dock a bike first:
+      bikes = subject.bikes
+      expect { subject.release_bike }.to raise_error 'No bikes available'
+    end
+
+    it 'raises an error when bike is broken' do
+       subject.dock(broken_bike)
+       expect {subject.release_bike }.to raise_error 'No working bikes available'
+    end
   end
 
-  it 'Set new DockingStation with user input' do
-    van = Van.new(8)
-    expect(van.capacity).to eq 8
+  describe '#dock' do
+    it 'contains bike' do
+       subject.dock(broken_bike)
+       expect(subject.bikes).to include broken_bike
+   end
+
+    it 'expects a bike to be docked' do
+      bikes = subject.bikes
+      expect(subject.dock(bike)).to eq (bikes << bike)
+    end
+
+    it 'raises an error when full' do
+      subject.capacity.times {subject.dock(bike)}
+      expect { subject.dock bike }.to raise_error 'Dock already full'
+    end
   end
 
 end
