@@ -30,11 +30,13 @@ describe DockingStation do
     end
 
     it 'releases a bike' do
+      allow(bike).to receive(:broken?).and_return(false)
       subject.dock(bike)
       expect(subject.release_bike).to eq bike
     end
 
     it 'releases a working bike' do
+       allow(bike).to receive(:broken?).and_return(false)
        subject.dock(bike)
        expect(subject.release_bike).not_to be_broken
     end
@@ -46,8 +48,8 @@ describe DockingStation do
     end
 
     it 'raises an error when bike is broken' do
+       allow(bike).to receive(:broken?).and_return(true)
        subject.dock(bike)
-       bike.report_broken
        expect {subject.release_bike }.to raise_error 'This bike is broken, please try again'
     end
   end
@@ -62,6 +64,14 @@ describe DockingStation do
 end
 
 =begin
+
+#alternative syntax for doubles (1)
+  describe '#dock' do
+    it 'raises an error when full' do
+      subject.capacity.times {subject.dock double :bike}
+      expect { subject.dock double(:bike) }.to raise_error 'Docking station full'
+    end
+  end
 
 
 it 'responds to the method report' do
