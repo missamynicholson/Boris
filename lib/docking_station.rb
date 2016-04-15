@@ -27,6 +27,10 @@ class DockingStation
      @bike_array <<  bike
   end
 
+  def sort_broken_bikes
+        @bike_broken =  @bike_array.select {|bike| bike.broken?}
+    end
+
 #private
 
   attr_reader :bike_array
