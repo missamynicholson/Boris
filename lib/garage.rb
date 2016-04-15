@@ -1,56 +1,45 @@
+require_relative 'van'
 require_relative 'bike'
 
 class Garage
-  DEFAULT_CAPACITY = 20
 
-  attr_reader :bike_array
-  attr_reader :capacity
+    attr_reader :capacity, :bikes, :broken_bikes
+
+    DEFAULT_CAPACITY = 20
 
 
-   def initialize(capacity = DEFAULT_CAPACITY)
-    @capacity = capacity
-    @bike_array = []
-   end
-
-  def release_bike
-    fail 'No bikes available' if self.empty?
-    bike_to_release = @bike_array.pop
-    if bike_to_release.broken? == true
-      fail 'This bike is broken, please try again'
-    else
-      return bike_to_release
+    def initialize(capacity = DEFAULT_CAPACITY)
+        @capacity = capacity
+        @bikes = []
+        @broken_bikes = []
     end
-  end
 
-  def dock(bike)
-    fail 'Docking station full' if self.full?
-    if bike.broken? == false
-      fail 'This bike is working, it should not be docked in the garage'
-    else
-      return @bike_array <<  bike
+     def dock_to_garage(bike)
+        fail "Dock already full" if full?
+        @broken_bikes << bike
     end
-  end
 
-  #def fix_bike(bike)
-    #bike.fix
-    #return bike
-  #end
-
-#private
-
-  def empty?
-    if @bike_array.empty?
-      true
-     else
-      false
-     end
-  end
-
-  def full?
-    if @bike_array.count >= @capacity
-      true
-    else
-      false
+     def fix_bike(bikes)
+    	array = bikes.each {|bike| bike.fix}
+    	@broken_bikes = []
+    	@bikes = array
     end
-  end
+
+    def release_bike_to_van
+        fail 'No bikes available' if empty?
+        fail 'no working bikes available' if @bikes.last.broken?
+        @bikes.pop
+    end
+
+    private
+
+
+    def full?
+        @broken_bikes.count >= capacity
+    end
+
+    def empty?
+        @bikes.empty?
+    end
+
 end
